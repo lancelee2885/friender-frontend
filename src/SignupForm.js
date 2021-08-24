@@ -27,8 +27,11 @@ function SignupForm({ signup }) {
     location: "",
     friendRadius: "50"
   });
+
+  const hobbiesOptions = ['hiking', 'cooking', 'reading'];
+
   const [checkedState, setCheckedState] = useState(
-    new Array(3).fill(false) // TODO: need to make the length dynamic
+    new Array(hobbiesOptions.length).fill(false)
   );
 
   const [formErrors, setFormErrors] = useState([]);
@@ -57,18 +60,22 @@ function SignupForm({ signup }) {
 
   /** Update form data field */
   function handleChange(evt) {
-    const { name, value } = evt.target;
-    setFormData(data => (
-      { ...data, 
-        [name]: value,}
-    ));
+    if (evt.target.name !== "hobbies" || evt.target.name !== "interests") {
+      const { name, value } = evt.target;
+
+      setFormData(data => (
+        { ...data, 
+          [name]: value,}
+      ));
+    }
   }
 
   function handleChangeForCheckBoxes(position) {
-    const updatedCheckedState = checkedState.map((checked, index) =>
-      index === position ? !checked : checked
+    const updatedCheckedState = checkedState.map((item, index) =>
+      index === position ? !item : item
     );
     setCheckedState(updatedCheckedState);
+    return;
   }
 
   const allRanges = document.querySelectorAll(".range-wrap");
@@ -187,7 +194,29 @@ function SignupForm({ signup }) {
 
               <div className="form-group">
                 <label>Hobbies</label>
-                <input
+                <ul className="hobbies-list">
+                {
+                  hobbiesOptions.map((hobby, index) => {
+                    return (
+                      <li key={index}>
+                        <div className="hobbies-list-item">
+                          <input 
+                            type="checkbox"
+                            id={`custom-checkbox-${index}`}
+                            name={hobby}
+                            value={hobby}
+                            checked={checkedState[index]}
+                            onChange={() => handleChangeForCheckBoxes(index)}
+                          ></input>
+                          <label htmlFor={`custom-checkbox-${index}`}>{hobby[0].toUpperCase() + hobby.substr(1).toLocaleLowerCase()}</label> 
+                        </div>
+                      </li>
+                    )
+                  })
+                }
+                </ul>
+
+                {/* <input
                   type="checkbox" id="hobbies" name="hobbies" value="Hiking" onChange={handleChange}></input>
                 <label htmlFor="hiking">Hiking</label>
                 <input
@@ -195,7 +224,7 @@ function SignupForm({ signup }) {
                 <label htmlFor="cooking">Cooking</label>
                 <input
                   type="checkbox" id="hobbies" name="hobbies" value="Reading" onChange={handleChange}></input>
-                <label htmlFor="reading">Reading</label>
+                <label htmlFor="reading">Reading</label> */}
               </div>
 
               <div className="form-group">
