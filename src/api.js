@@ -39,8 +39,9 @@ class FrienderApi {
   /** Get details on a user. */
   
   static async getUserInfo(username) {
-    let res = await this.request(`users/${username}`);
-    return res.user;
+    let resUser = await this.request(`users/${username}`);
+
+    return resUser.user;
   }
   
   /** Registers a user and returns a token. */

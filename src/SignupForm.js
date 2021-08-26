@@ -4,18 +4,18 @@ import { useHistory } from "react-router-dom";
 import UploadImagetoS3WithFileReaderAPI from "./UploadImagetoS3WithFileReaderAPI"
 import FrienderApi from './api';
 
-/** Signup form.
+/** signUp form.
  *
  * Shows form and manages update to state on changes.
  * On submission:
- * - calls signup function prop
+ * - calls signUp function prop
  * - redirects to /FriendsFinder route
  *
- * Routes -> SignupForm -> Alert
- * Routed as /signup
+ * Routes -> SignUpForm -> Alert
+ * Routed as /signUp
  */
 
-function SignupForm({ signup }) {
+function SignUpForm({ signUp }) {
   const history = useHistory();
   const [formData, setFormData] = useState({
     username: "",
@@ -36,8 +36,8 @@ function SignupForm({ signup }) {
   const [formErrors, setFormErrors] = useState([]);
 
   console.debug(
-    "SignupForm",
-    "signup=", typeof signup,
+    "SignUpForm",
+    "signUp=", typeof signUp,
     "formData=", formData,
     "formErrors=", formErrors,
   );
@@ -50,7 +50,7 @@ function SignupForm({ signup }) {
   async function handleSubmitUser(evt) {
     evt.preventDefault();
     try {
-      await FrienderApi.signUp(formData);
+      await signUp(formData);
       // history.push("/FriendsFinder");
       setStep("step2")
     } catch (err) {
@@ -109,7 +109,7 @@ function SignupForm({ signup }) {
   return (
     step === "step1" 
     ?
-    <div className="SignupForm">
+    <div className="SignUpForm">
       <div className="container col-md-6 offset-md-3 col-lg-4 offset-lg-4">
         <h2 className="mb-3">Sign Up</h2>
         <div className="card">
@@ -265,4 +265,4 @@ function SignupForm({ signup }) {
   );
 }
 
-export default SignupForm;
+export default SignUpForm;

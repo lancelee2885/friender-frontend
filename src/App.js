@@ -58,14 +58,14 @@ function App() {
 
   }
 
-  /** Handles site-wide signup.
+  /** Handles site-wide signUp.
    *
-   * Automatically logs them in (set token) upon signup.
+   * Automatically logs them in (set token) upon signUp.
    *
    * Make sure you await this function to see if any error happens.
    */
-  async function signup(signupData) {
-    let token = await FrienderApi.signup(signupData);
+  async function signUp(signupData) {
+    let token = await FrienderApi.signUp(signupData);
     setToken(token);
     return localStorage.setItem("token", token);
   }
@@ -84,7 +84,7 @@ function App() {
     <UserContext.Provider value={currUser}>
       <BrowserRouter>
         <Navbar />
-        <Routes logIn={logIn} signup={signup} handleUpdate={handleUpdate} />
+        <Routes logIn={logIn} signUp={signUp} handleUpdate={handleUpdate} />
       </BrowserRouter>
     </UserContext.Provider>
   );

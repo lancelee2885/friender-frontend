@@ -7,22 +7,22 @@ import {getS3Image} from "./s3"
 import {REACT_APP_S3_BUCKET} from "./secret" 
 
 
-/** Signup form.
+/** signUp form.
  *
  * Shows form and manages update to state on changes.
  * On submission:
- * - calls signup function prop
+ * - calls signUp function prop
  * - redirects to /FriendsFinder route
  *
- * Routes -> SignupForm -> Alert
- * Routed as /signup
+ * Routes -> SignUpForm -> Alert
+ * Routed as /signUp
  */
 
 function ProfileForm({ handleUpdate }) {
 
   const currUser = useContext(UserContext) || {};
 
-  const {username, firstName, lastName, email, gender, age, location, friendRadius, imgID} = currUser;
+  const {username, firstName, lastName, email, gender, age, location, friendRadius, imgID, hobbies} = currUser;
 
   const history = useHistory();
   const [formData, setFormData] = useState({
@@ -33,8 +33,8 @@ function ProfileForm({ handleUpdate }) {
     email: email,
     gender: gender,
     age: age,
-    // hobbies: [],
-    // interests: [],
+    hobbies: hobbies,
+    // interests: interests,
     location: location,
     friendRadius: friendRadius
   });
@@ -45,7 +45,7 @@ function ProfileForm({ handleUpdate }) {
 
   console.debug(
     "ProfileForm",
-    "signup=", typeof signup,
+    "signUp=", typeof signUp,
     "formData=", formData,
     "formErrors=", formErrors,
   );
@@ -92,7 +92,7 @@ function ProfileForm({ handleUpdate }) {
     setFormData(data => (
       { ...data, 
         [name]: value,
-        // "hobbies": hobbies,
+        "hobbies": hobbies,
         // "interests": interests,
       }));
   }

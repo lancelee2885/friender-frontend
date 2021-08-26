@@ -1,14 +1,14 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import Homepage from './Homepage';
-import SignupForm from './SignupForm';
+import SignUpForm from './SignUpForm';
 import LogInForm from './LogInForm';
 import FriendsFinder from './FriendsFinder';
 import ProfileForm from './ProfileForm';
 import FriendsPage from './FriendsPage';
 import MessagesPage from './MessagesPage';
 
-function Routes({ logIn, signup, handleUpdate }) {
+function Routes({ logIn, signUp, handleUpdate }) {
   console.debug(
     "Routes",
     `logIn=${typeof logIn}`,
@@ -21,8 +21,8 @@ function Routes({ logIn, signup, handleUpdate }) {
         <Route exact path="/">
           <Homepage />
         </Route>
-        <Route exact path="/signup">
-          <SignupForm signup={signup}/>
+        <Route exact path="/signUp">
+          <SignUpForm signUp={signUp}/>
         </Route>
         <Route exact path="/logIn">
           <LogInForm logIn={logIn}/>
