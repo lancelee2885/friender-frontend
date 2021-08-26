@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 // import pong from "../../lib/pong";
 import uploadToS3 from "./s3";
-import { AWS_BUCKET } from "./secret";
+import { REACT_APP_S3_BUCKET } from "./secret";
 
 const Upload = () => {
 
@@ -42,7 +42,7 @@ const Upload = () => {
         });
       async function upload() {
         await uploadToS3({
-          bucket: AWS_BUCKET,
+          bucket: REACT_APP_S3_BUCKET,
           acl: "public-read",
           key: id + '.' + file.name.split('.')[1],
           data: onLoadEndEvent.target.result.split(",")[1],

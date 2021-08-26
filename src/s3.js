@@ -1,10 +1,10 @@
 import AWS from "aws-sdk";
-import {AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION} from "./secret"
+import {REACT_APP_AWS_ACCESS_KEY, REACT_APP_AWS_SECRET_KEY, REACT_APP_AWS_REGION} from "./secret"
 
 AWS.config = new AWS.Config({
-  accessKeyId: AWS_ACCESS_KEY,
-  secretAccessKey: AWS_SECRET_KEY,
-  region: AWS_REGION,
+  accessKeyId: REACT_APP_AWS_ACCESS_KEY,
+  secretAccessKey: REACT_APP_AWS_SECRET_KEY,
+  region: REACT_APP_AWS_REGION,
 });
 
 const s3 = new AWS.S3();
