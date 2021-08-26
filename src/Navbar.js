@@ -14,25 +14,25 @@ function Navbar() {
   return (
     <nav>
       <NavLink to="/">
-        Friender
+        Friender  
       </NavLink>
       <NavLink to="/signup">
-        Signup
+        Signup  
       </NavLink>
       <NavLink to="/logIn">
-        logIn
+        Login  
       </NavLink>
       <NavLink to="/friendsfinder">
-        Friends Finder
+        Friends Finder  
       </NavLink>
       <NavLink to="/profile">
-        Profile
+        Profile  
       </NavLink>
       <NavLink to="/friends">
-        Friends
+        Friends  
       </NavLink>
       <NavLink to="/messages">
-        Messages
+        Messages  
       </NavLink>
     </nav>
   );

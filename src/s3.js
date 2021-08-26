@@ -27,4 +27,17 @@ async function uploadToS3(options) {
   };
 };
 
-export default uploadToS3;
+async function getS3Image(options) {
+  await s3
+    .getObject({
+      Bucket: options.bucket,
+      Key: options.key,
+    })
+    .promise();
+
+  return {
+    url: `https://${options.bucket}.s3.amazonaws.com/${options.key}`,
+  };
+};
+
+export {uploadToS3, getS3Image};

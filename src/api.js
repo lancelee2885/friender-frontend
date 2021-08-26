@@ -36,12 +36,12 @@ class FrienderApi {
 
   // /*************** User Routes ***************/
 
-  // /** Get details on a user. */
+  /** Get details on a user. */
   
-  // static async getUserInfo(username) {
-  //   let res = await this.request(`users/${username}`);
-  //   return res.user;
-  // }
+  static async getUserInfo(username) {
+    let res = await this.request(`users/${username}`);
+    return res.user;
+  }
   
   /** Registers a user and returns a token. */
 
@@ -67,10 +67,10 @@ class FrienderApi {
   
   // /** Authenticates user credentials and returns a token. */
 
-  // static async updateUser(userInfo, username) {
-  //   let res = await this.request(`users/${username}`, userInfo, "patch");
-  //   return res.user;
-  // }
+  static async updateUser(userInfo, username) {
+    let res = await this.request(`users/${username}`, userInfo, "patch");
+    return res.user;
+  }
   
   // /** Apply to a job. */
 

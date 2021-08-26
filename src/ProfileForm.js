@@ -1,29 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
+// import UploadImageToS3WithNativeSdk from "./UploadImageToS3WithNativeSdk";
+import UploadImagetoS3WithFileReaderAPI from "./UploadImagetoS3WithFileReaderAPI"
+import UserContext from "./UserContext";
+import {getS3Image} from "./s3"
+import {REACT_APP_S3_BUCKET} from "./secret" 
 
-function ProfileForm() {
+
+/** Signup form.
+ *
+ * Shows form and manages update to state on changes.
+ * On submission:
+ * - calls signup function prop
+ * - redirects to /FriendsFinder route
+ *
+ * Routes -> SignupForm -> Alert
+ * Routed as /signup
+ */
+
+function ProfileForm({ handleUpdate }) {
+
+  const currUser = useContext(UserContext) || {};
+
+  const {username, firstName, lastName, email, gender, age, location, friendRadius, imgID} = currUser;
+
   const history = useHistory();
   const [formData, setFormData] = useState({
-    username: "",
+    username: username,
     password: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    gender: "",
-    age: "",
-    hobbies: [],
-    interests: [],
-    location: "",
-    friendRadius: "50"
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    gender: gender,
+    age: age,
+    // hobbies: [],
+    // interests: [],
+    location: location,
+    friendRadius: friendRadius
   });
-  // const [checkedState, setCheckedState] = useState(
-  //   new Array(3).fill(false) // TODO: need to make the length dynamic
-  // );
+
+  const [step, setStep] = useState("step1");
 
   const [formErrors, setFormErrors] = useState([]);
 
   console.debug(
-    "SignupForm",
+    "ProfileForm",
     "signup=", typeof signup,
     "formData=", formData,
     "formErrors=", formErrors,
@@ -34,15 +55,32 @@ function ProfileForm() {
    * Calls logIn func prop and, if successful, redirect to /FriendsFinder.
    */
 
-  async function handleSubmit(evt) {
+  async function update(evt) {
     evt.preventDefault();
-    // try {
-    //   await signup(formData);
-    //   history.push("/FriendsFinder");
-    // } catch (err) {
-    //   setFormErrors(err);
-    // }
+    try {
+
+      await handleUpdate(formData, username);
+      // history.push("/FriendsFinder");
+      setStep("step2")
+    } catch (err) {
+      setFormErrors(err);
+    }
   }
+
+  /** TODO: Once user upload an image, redirect to homepage/profile page */
+  async function handleSubmitPhoto(evt) {
+    evt.preventDefault();
+    try {
+      history.push("/FriendsFinder");
+    } catch (err) {
+      setFormErrors(err);
+    }
+  }
+
+  function skip(){
+    history.push("/FriendsFinder");
+  }
+
 
   /** Update form data field */
   function handleChange(evt) {
@@ -52,20 +90,12 @@ function ProfileForm() {
     const interests = Array.from(document.querySelectorAll("input[name=interests]:checked")).map(i => i.value);
 
     setFormData(data => (
-      {
-        ...data,
+      { ...data, 
         [name]: value,
-        "hobbies": hobbies,
-        "interests": interests
+        // "hobbies": hobbies,
+        // "interests": interests,
       }));
   }
-
-  // function handleChangeForCheckBoxes(position) {
-  //   const updatedCheckedState = checkedState.map((checked, index) =>
-  //     index === position ? !checked : checked
-  //   );
-  //   setCheckedState(updatedCheckedState);
-  // }
 
   const allRanges = document.querySelectorAll(".range-wrap");
   allRanges.forEach(wrap => {
@@ -87,24 +117,36 @@ function ProfileForm() {
 
     // Sorta magic numbers based on size of the native UI thumb
     bubble.style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
-  }
+  } 
 
   return (
-    <div className="SignupForm">
+    step === "step1" 
+    ?
+    <div className="ProfileForm">
       <div className="container col-md-6 offset-md-3 col-lg-4 offset-lg-4">
-        <h2 className="mb-3">Edit Your Profile</h2>
+        <h2 className="mb-3">Edit Profile</h2>
         <div className="card">
           <div className="card-body">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={update}>
               <div className="form-group">
                 <label>Username</label>
                 <input
                   name="username"
                   className="form-control"
-                  value="currUser"
+                  value={formData.username}
                   onChange={handleChange}
                   disabled
-                ></input>
+                />
+              </div>
+              <div className="form-group">
+                <label>Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  className="form-control"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
               </div>
 
               <div className="form-group">
@@ -143,20 +185,18 @@ function ProfileForm() {
                   type="radio"
                   id="male"
                   name="gender"
-                  value="male"
+                  value="M"
                   onChange={handleChange}
                   className="form-control"
-                // checked={form.type === 'gender'}
                 />
                 <label htmlFor="female">Female</label>
                 <input
                   type="radio"
                   id="female"
                   name="gender"
-                  value="female"
+                  value="F"
                   onChange={handleChange}
                   className="form-control"
-                // checked={form.type === 'gender'}
                 />
               </div>
 
@@ -209,17 +249,7 @@ function ProfileForm() {
                 <input type="range" className="range" name="friendRadius" id="friendRadius" value={formData.friendRadius} onChange={handleChange}></input>
                 <output className="bubble"></output>
               </div>
-
-              <div className="form-group">
-                <label>Confirm Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  className="form-control"
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-              </div>
+ 
               {/* // continue here */}
 
               {/* 
@@ -231,17 +261,27 @@ function ProfileForm() {
               <button
                 type="submit"
                 className="btn btn-primary float-right"
-                onSubmit={handleSubmit}
               >
-                Submit
+                Next >
               </button>
             </form>
           </div>
         </div>
       </div>
     </div>
+    :
+    <div>
+      <h3>Current Profile Picture</h3>
+      <img src={`https://${REACT_APP_S3_BUCKET}.s3.amazonaws.com/${imgID}`} alt=""></img>
+      <UploadImagetoS3WithFileReaderAPI username={formData.username}/>   
+      <button onClick={handleSubmitPhoto}>
+        Finish Uploading
+      </button>  
+      <button onClick={skip}>
+        Skip
+      </button>       
+    </div>
   );
 }
-
 
 export default ProfileForm;

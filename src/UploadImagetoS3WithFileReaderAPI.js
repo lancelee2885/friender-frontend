@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 // import pong from "../../lib/pong";
-import uploadToS3 from "./s3";
+import {uploadToS3} from "./s3";
 import { REACT_APP_S3_BUCKET } from "./secret";
 
 const Upload = ({username}) => {

@@ -8,7 +8,7 @@ import ProfileForm from './ProfileForm';
 import FriendsPage from './FriendsPage';
 import MessagesPage from './MessagesPage';
 
-function Routes({ logIn, signup }) {
+function Routes({ logIn, signup, handleUpdate }) {
   console.debug(
     "Routes",
     `logIn=${typeof logIn}`,
@@ -31,7 +31,7 @@ function Routes({ logIn, signup }) {
           <FriendsFinder />
         </Route>
         <Route exact path="/profile">
-          <ProfileForm />
+          <ProfileForm handleUpdate={handleUpdate}/>
         </Route>
         <Route exact path="/friends">
           <FriendsPage />
