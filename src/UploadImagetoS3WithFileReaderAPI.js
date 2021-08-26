@@ -1,8 +1,14 @@
 import React, { useState } from "react";
-import pong from "../../lib/pong";
+import { v4 as uuid } from "uuid";
+// import pong from "../../lib/pong";
+import uploadToS3 from "./s3";
+import { AWS_BUCKET } from "./secret";
 
 const Upload = () => {
+
   const [uploading, setUploading] = useState(false);
+
+  const id = uuid();
 
   const handleUpload = (uploadEvent) => {
     uploadEvent.persist();
@@ -12,31 +18,43 @@ const Upload = () => {
     const reader = new FileReader();
 
     reader.onloadend = (onLoadEndEvent) => {
-      fetch("http://localhost:3001/uploads/s3", {
+      fetch("http://localhost:3001/users/testuser1/upload", {
         method: "POST",
         mode: "cors",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          key: file.name,
+          key: id + '.' + file.name.split('.')[1],
           data: onLoadEndEvent.target.result.split(",")[1],
           contentType: file.type,
         }),
       })
         .then(() => {
           setUploading(false);
-          pong.success("File uploaded!");
+          // pong.success("File uploaded!");
           uploadEvent.target.value = "";
         })
         .catch((error) => {
           setUploading(false);
-          pong.danger(error.message || error.reason || error);
+          // pong.danger(error.message || error.reason || error);
           uploadEvent.target.value = "";
         });
+      async function upload() {
+        await uploadToS3({
+          bucket: AWS_BUCKET,
+          acl: "public-read",
+          key: id + '.' + file.name.split('.')[1],
+          data: onLoadEndEvent.target.result.split(",")[1],
+          contentType: file.type
+        });
+        setUploading(false);
+      };
+      upload();
     };
 
     reader.readAsDataURL(file);
+
   };
 
   return (

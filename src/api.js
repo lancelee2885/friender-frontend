@@ -58,6 +58,12 @@ class FrienderApi {
     this.token = res.token;
     return res.token;
   }
+
+  static async upload(username) {
+    let res = await this.request(`users/testuser1/upload`, username, "post");
+    this.token = res.token;
+    return res.token;
+  }
   
   // /** Authenticates user credentials and returns a token. */
 

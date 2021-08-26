@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import UploadImageToS3WithNativeSdk, {id} from "./UploadImageToS3WithNativeSdk";
+// import UploadImageToS3WithNativeSdk from "./UploadImageToS3WithNativeSdk";
+import UploadImagetoS3WithFileReaderAPI from "./UploadImagetoS3WithFileReaderAPI"
 
 /** Signup form.
  *
@@ -27,7 +28,7 @@ function SignupForm({ signup }) {
     interests: [],
     location: "",
     friendRadius: "50",
-    imageId: id
+    imageId: ""
   });
   // const [checkedState, setCheckedState] = useState(
   //   new Array(3).fill(false) // TODO: need to make the length dynamic
@@ -232,7 +233,7 @@ function SignupForm({ signup }) {
                 <output className="bubble"></output>
               </div>
 
-              <UploadImageToS3WithNativeSdk onChange={handleChange}/>    
+              <UploadImagetoS3WithFileReaderAPI/>    
               {/* // continue here */}
 
               {/* 
