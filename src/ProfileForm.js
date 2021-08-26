@@ -31,7 +31,7 @@ function ProfileForm() {
 
   /** Handle form submit:
    *
-   * Calls login func prop and, if successful, redirect to /FriendsFinder.
+   * Calls logIn func prop and, if successful, redirect to /FriendsFinder.
    */
 
   async function handleSubmit(evt) {

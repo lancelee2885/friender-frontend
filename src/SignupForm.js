@@ -44,7 +44,7 @@ function SignupForm({ signup }) {
 
   /** Handle form submit:
    *
-   * Calls login func prop and, if successful, redirect to /FriendsFinder.
+   * Calls logIn func prop and, if successful, redirect to /FriendsFinder.
    */
 
   async function handleSubmitUser(evt) {
@@ -62,7 +62,7 @@ function SignupForm({ signup }) {
   async function handleSubmitPhoto(evt) {
     evt.preventDefault();
     try {
-      history.push("/"); //TODO: push to profile page
+      history.push("/FriendsFinder");
     } catch (err) {
       setFormErrors(err);
     }
@@ -84,13 +84,6 @@ function SignupForm({ signup }) {
       }));
   }
 
-  // function handleChangeForCheckBoxes(position) {
-  //   const updatedCheckedState = checkedState.map((checked, index) =>
-  //     index === position ? !checked : checked
-  //   );
-  //   setCheckedState(updatedCheckedState);
-  // }
-
   const allRanges = document.querySelectorAll(".range-wrap");
   allRanges.forEach(wrap => {
     const range = wrap.querySelector(".range");
@@ -111,9 +104,7 @@ function SignupForm({ signup }) {
 
     // Sorta magic numbers based on size of the native UI thumb
     bubble.style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
-  }
-
-//<UploadImagetoS3WithFileReaderAPI/>   
+  } 
 
   return (
     step === "step1" 

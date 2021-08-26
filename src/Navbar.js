@@ -4,7 +4,7 @@ import { Link, NavLink } from "react-router-dom";
 /** Navigation bar for site. Shows up on every page.
  *
  * When user is logged in, shows links to main areas of site. When not,
- * shows link to Login and Signup forms.
+ * shows link to logIn and Signup forms.
  *
  * Rendered by App.
  */
@@ -19,8 +19,8 @@ function Navbar() {
       <NavLink to="/signup">
         Signup
       </NavLink>
-      <NavLink to="/login">
-        Login
+      <NavLink to="/logIn">
+        logIn
       </NavLink>
       <NavLink to="/friendsfinder">
         Friends Finder

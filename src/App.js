@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import Routes from './Routes';
 import Navbar from './Navbar';
@@ -7,14 +7,35 @@ import FrienderApi from './api'
 
 function App() {
 
-  async function signup(){
+  const initialToken = JSON.parse(localStorage.getItem("token")) || null; 
+  const [token, setToken] = useState(initialToken);
 
+  /** Handles site-wide signup.
+   *
+   * Automatically logs them in (set token) upon signup.
+   *
+   * Make sure you await this function to see if any error happens.
+   */
+   async function signup(signupData) {
+    let token = await FrienderApi.signup(signupData);
+    setToken(token);
+    return localStorage.setItem("token", JSON.stringify(token));
+  }
+
+  /** Handles site-wide logIn.
+   *
+   * Make sure you await this function to see if any error happens.
+   */
+   async function logIn(logInData) {
+    let token = await FrienderApi.logIn(logInData);
+    setToken(token);
+    return localStorage.setItem("token", JSON.stringify(token));
   }
 
   return (
     <BrowserRouter>
       <Navbar />
-      <Routes />
+      <Routes logIn={logIn} signup={signup}/>
     </BrowserRouter>
   );
 }
