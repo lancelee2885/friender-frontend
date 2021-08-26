@@ -45,6 +45,9 @@ function Routes({ login, signup }) {
         <Route exact path="/messages/:id">
           <MessagesPage />
         </Route>
+        <Route exact path="/uploads/s3">
+          <MessagesPage />
+        </Route>
         <Redirect to="/" />
       </Switch>
     </div>
