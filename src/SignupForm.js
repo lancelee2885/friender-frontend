@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 // import UploadImageToS3WithNativeSdk from "./UploadImageToS3WithNativeSdk";
 import UploadImagetoS3WithFileReaderAPI from "./UploadImagetoS3WithFileReaderAPI"
+import FrienderApi from './api';
 
 /** Signup form.
  *
@@ -27,12 +28,10 @@ function SignupForm({ signup }) {
     hobbies: [],
     interests: [],
     location: "",
-    friendRadius: "50",
-    imageId: ""
+    friendRadius: "50"
   });
-  // const [checkedState, setCheckedState] = useState(
-  //   new Array(3).fill(false) // TODO: need to make the length dynamic
-  // );
+
+  const [step, setStep] = useState("step1");
 
   const [formErrors, setFormErrors] = useState([]);
 
@@ -48,15 +47,27 @@ function SignupForm({ signup }) {
    * Calls login func prop and, if successful, redirect to /FriendsFinder.
    */
 
-  async function handleSubmit(evt) {
+  async function handleSubmitUser(evt) {
     evt.preventDefault();
     try {
-      await signup(formData);
-      history.push("/FriendsFinder");
+      await FrienderApi.signUp(formData);
+      // history.push("/FriendsFinder");
+      setStep("step2")
     } catch (err) {
       setFormErrors(err);
     }
   }
+
+  /** TODO: Once user upload an image, redirect to homepage/profile page */
+  async function handleSubmitPhoto(evt) {
+    evt.preventDefault();
+    try {
+      history.push("/"); //TODO: push to profile page
+    } catch (err) {
+      setFormErrors(err);
+    }
+  }
+
 
   /** Update form data field */
   function handleChange(evt) {
@@ -70,7 +81,6 @@ function SignupForm({ signup }) {
         [name]: value,
         "hobbies": hobbies,
         "interests": interests,
-        // "imgKey": document.getElementById("photo").value.split("\\")[2]
       }));
   }
 
@@ -103,13 +113,17 @@ function SignupForm({ signup }) {
     bubble.style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
   }
 
+//<UploadImagetoS3WithFileReaderAPI/>   
+
   return (
+    step === "step1" 
+    ?
     <div className="SignupForm">
       <div className="container col-md-6 offset-md-3 col-lg-4 offset-lg-4">
         <h2 className="mb-3">Sign Up</h2>
         <div className="card">
           <div className="card-body">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmitUser}>
               <div className="form-group">
                 <label>Username</label>
                 <input
@@ -166,20 +180,18 @@ function SignupForm({ signup }) {
                   type="radio"
                   id="male"
                   name="gender"
-                  value="male"
+                  value="M"
                   onChange={handleChange}
                   className="form-control"
-                // checked={form.type === 'gender'}
                 />
                 <label htmlFor="female">Female</label>
                 <input
                   type="radio"
                   id="female"
                   name="gender"
-                  value="female"
+                  value="F"
                   onChange={handleChange}
                   className="form-control"
-                // checked={form.type === 'gender'}
                 />
               </div>
 
@@ -232,8 +244,7 @@ function SignupForm({ signup }) {
                 <input type="range" className="range" name="friendRadius" id="friendRadius" value={formData.friendRadius} onChange={handleChange}></input>
                 <output className="bubble"></output>
               </div>
-
-              <UploadImagetoS3WithFileReaderAPI/>    
+ 
               {/* // continue here */}
 
               {/* 
@@ -245,14 +256,20 @@ function SignupForm({ signup }) {
               <button
                 type="submit"
                 className="btn btn-primary float-right"
-                onSubmit={handleSubmit}
               >
-                Submit
+                Next >
               </button>
             </form>
           </div>
         </div>
       </div>
+    </div>
+    :
+    <div>
+      <UploadImagetoS3WithFileReaderAPI username={formData.username}/>   
+      <button type='submit' onClick={handleSubmitPhoto}>
+        Finish Uploading
+      </button>         
     </div>
   );
 }

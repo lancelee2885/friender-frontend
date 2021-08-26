@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 import uploadToS3 from "./s3";
 import { REACT_APP_S3_BUCKET } from "./secret";
 
-const Upload = () => {
+const Upload = ({username}) => {
 
   const [uploading, setUploading] = useState(false);
 
@@ -18,7 +18,7 @@ const Upload = () => {
     const reader = new FileReader();
 
     reader.onloadend = (onLoadEndEvent) => {
-      fetch("http://localhost:3001/users/testuser1/upload", {
+      fetch(`http://localhost:3001/users/${username}/upload`, { //TODO: make username dynamic
         method: "POST",
         mode: "cors",
         headers: {
