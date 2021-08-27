@@ -28,7 +28,8 @@ function SignUpForm({ signUp }) {
     hobbies: [],
     interests: [],
     location: "",
-    friendRadius: "50"
+    friendRadius: "50",
+    imgFile: null //TODO:
   });
 
   const [step, setStep] = useState("step1");
@@ -49,8 +50,13 @@ function SignUpForm({ signUp }) {
 
   async function handleSubmitUser(evt) {
     evt.preventDefault();
+    let data = new FormData();
+    for (let key in formData){
+      data.append(key, formData[key]);
+    }
+
     try {
-      await signUp(formData);
+      await signUp(data);
       // history.push("/FriendsFinder");
       setStep("step2")
     } catch (err) {
@@ -72,7 +78,12 @@ function SignUpForm({ signUp }) {
   /** Update form data field */
   function handleChange(evt) {
 
-    const { name, value } = evt.target;
+    const { name, value } = evt.target; //TODO: access file at evt.target.files -> array of files 
+    const files = evt.target.files; //undefined or arr, check and see if uploaded
+    let file = null;
+    if (files) {
+      file = evt.target.files[0];
+    }
     const hobbies = Array.from(document.querySelectorAll("input[name=hobbies]:checked")).map(i => i.value);
     const interests = Array.from(document.querySelectorAll("input[name=interests]:checked")).map(i => i.value);
 
@@ -81,6 +92,7 @@ function SignUpForm({ signUp }) {
         [name]: value,
         "hobbies": hobbies,
         "interests": interests,
+        imgFile: file
       }));
   }
 
@@ -106,6 +118,8 @@ function SignUpForm({ signUp }) {
     bubble.style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
   } 
 
+  //TODO: add enc type -> value: multipart/form-data 
+  // look up FormData -> JS obj
   return (
     step === "step1" 
     ?
@@ -235,6 +249,16 @@ function SignUpForm({ signUp }) {
                 <input type="range" className="range" name="friendRadius" id="friendRadius" value={formData.friendRadius} onChange={handleChange}></input>
                 <output className="bubble"></output>
               </div>
+
+              <div className="form-group">
+                <label>File</label>
+                <input
+                  type="file"
+                  name="imgFile"
+                  className="form-control"
+                  onChange={handleChange}
+                />
+              </div>
  
               {/* // continue here */}
 
@@ -260,7 +284,7 @@ function SignUpForm({ signUp }) {
       <UploadImagetoS3WithFileReaderAPI username={formData.username}/>   
       <button type='submit' onClick={handleSubmitPhoto}>
         Finish Uploading
-      </button>         
+    </button>         
     </div>
   );
 }
